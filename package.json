@@ -1,0 +1,38 @@
+{
+  "name": "vending-machine",
+  "version": "1.0.0",
+  "description": "A rest APIs for vending machine",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "env-cmd -f ./config/prod.env node src/index.js",
+    "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
+    "test": "env-cmd -f ./config/test.env jest --watch --runInBand"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/MohabMohamed/vending-machine"
+  },
+  "author": "Mohab Abd El-Dayem <mohab.m.mohamed@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.3",
+    "express-validator": "^6.14.0",
+    "helmet": "^5.0.2",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.17.0"
+  },
+  "devDependencies": {
+    "env-cmd": "^10.1.0",
+    "husky": "^7.0.4",
+    "jest": "^27.5.1",
+    "lint-staged": "^12.3.7",
+    "nodemon": "^2.0.15",
+    "prettier-standard": "^16.4.1",
+    "supertest": "^6.2.2",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.3.0"
+  }
+}
