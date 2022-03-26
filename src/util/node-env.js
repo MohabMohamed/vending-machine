@@ -1,7 +1,7 @@
 const NODE_ENV_ENUM = {
-  dev: 'dev',
+  dev: 'development',
   test: 'test',
-  prod: 'prod'
+  prod: 'production'
 }
 
 const _actualNodeEnv = process.env.NODE_ENV
