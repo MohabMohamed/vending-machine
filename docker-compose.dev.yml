@@ -1,0 +1,25 @@
+version: "3.7"
+services:
+  vending_machine_dev:
+      build:
+        context: .
+      working_dir: /app
+      env_file:
+        - ./config/dev.env
+      ports:
+        - 3000:3000
+      depends_on:
+        - postgres
+      volumes:
+        - ./:/app
+  postgres:
+    image: postgres:14.2-alpine3.15
+    env_file:
+      -  ./config/dev.env
+    expose: 
+      - '3586'
+    ports: 
+      - '3586:5432'
+    volumes:
+      - ~/pg_data/vending_dev:/var/lib/postgresql/data
+    
