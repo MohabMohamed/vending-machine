@@ -8,7 +8,8 @@
     "dev": "nodemon src/index.js",
     "test": "env-cmd -f ./config/test.env jest --runInBand",
     "test:watch": "env-cmd -f ./config/test.env jest --watch --runInBand",
-    "prepare:dev": "husky install"
+    "prepare:dev": "husky install",
+    "db:makemigrations": "./node_modules/sequelize-auto-migrations/bin/makemigration.js --name "
   },
   "repository": {
     "type": "git",
@@ -24,7 +25,8 @@
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.17.0"
+    "sequelize": "^6.17.0",
+    "sequelize-auto-migrations": "github:scimonster/sequelize-auto-migrations#a063aa6535a3f580623581bf866cef2d609531ba"
   },
   "devDependencies": {
     "env-cmd": "^10.1.0",

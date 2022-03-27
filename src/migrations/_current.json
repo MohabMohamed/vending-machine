@@ -1,0 +1,50 @@
+{
+    "tables": {
+        "User": {
+            "tableName": "User",
+            "schema": {
+                "id": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "username": {
+                    "unique": true,
+                    "allowNull": false,
+                    "field": "username",
+                    "seqType": "Sequelize.STRING(20)"
+                },
+                "password": {
+                    "allowNull": false,
+                    "field": "password",
+                    "seqType": "Sequelize.STRING"
+                },
+                "deposit": {
+                    "defaultValue": {
+                        "value": 0
+                    },
+                    "allowNull": false,
+                    "field": "deposit",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "role": {
+                    "field": "role",
+                    "seqType": "Sequelize.ENUM('buyer', 'seller')"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        }
+    },
+    "revision": 1
+}
