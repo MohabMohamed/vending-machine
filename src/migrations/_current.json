@@ -54,6 +54,44 @@
             },
             "indexes": []
         },
+        "RefreshToken": {
+            "tableName": "RefreshToken",
+            "schema": {
+                "id": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "userId": {
+                    "allowNull": false,
+                    "field": "userId",
+                    "references": {
+                        "model": "User",
+                        "key": "id"
+                    },
+                    "onDelete": "cascade",
+                    "onUpdate": "cascade",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "token": {
+                    "allowNull": false,
+                    "field": "token",
+                    "seqType": "Sequelize.STRING(400)"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
         "User": {
             "tableName": "User",
             "schema": {
@@ -100,5 +138,5 @@
             "indexes": []
         }
     },
-    "revision": 2
+    "revision": 3
 }
