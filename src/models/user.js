@@ -1,8 +1,10 @@
 const db = require('../db')
 const { DataTypes } = require('sequelize')
-const { unableToLogin } = require('../errors/userError')
-const UserDto = require('../dtos/user')
+const userError = require('../errors/userError')
+const { UserDto } = require('../dtos/user')
 const bcrypt = require('bcryptjs')
+const { v4: uuid } = require('uuid')
+const jwt = require('../util/jwt')
 
 const User = db.sequelize.define(
   'User',
@@ -83,6 +85,57 @@ User.findByCredentials = async (username, password) => {
 
 User.prototype.toJSON = function () {
   return new UserDto(user)
+}
+
+User.prototype.generateAccessToken = function () {
+  const { id, username, role } = this.dataValues
+
+  return jwt.sign(
+    {
+      id,
+      username,
+      role
+    },
+    process.env.ACCESS_JWT_SECRET,
+    Number(process.env.ACCESS_TOKEN_LIFE_SPAN)
+  )
+}
+
+User.generateRefreshToken = function () {
+  return jwt.sign(
+    { session: uuid() },
+    process.env.REFRESH_JWT_SECRET,
+    Number(process.env.REFRESH_TOKEN_LIFE_SPAN)
+  )
+}
+User.register = async user => {
+  const matchedUser = await User.findOne({
+    where: {
+      username: user.username
+    }
+  })
+
+  if (matchedUser) {
+    throw userError.existingUsername()
+  }
+
+  const refreshToken = User.generateRefreshToken()
+
+  try {
+    const newUser = await User.create(
+      {
+        ...user,
+        refreshToken: { token: refreshToken }
+      },
+      {
+        include: ['refreshToken']
+      }
+    )
+
+    return newUser
+  } catch (error) {
+    throw error
+  }
 }
 
 User.associate = models => {
