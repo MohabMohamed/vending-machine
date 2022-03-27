@@ -85,4 +85,13 @@ User.prototype.toJSON = function () {
   return new UserDto(user)
 }
 
+User.associate = models => {
+  User.hasMany(models.Product, {
+    foreignKey: 'sellerId',
+    as: 'product',
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE'
+  })
+}
+
 module.exports = User
