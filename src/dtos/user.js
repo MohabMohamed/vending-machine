@@ -18,4 +18,15 @@ class UserRegistrationDto {
   }
 }
 
-module.exports = { UserDto, UserRegistrationDto }
+class UserLoginDto {
+  constructor (user, refreshToken, accessToken) {
+    const userDto = new UserDto(user)
+    return {
+      user: userDto,
+      refreshToken: refreshToken,
+      accessToken
+    }
+  }
+}
+
+module.exports = { UserDto, UserRegistrationDto, UserLoginDto }

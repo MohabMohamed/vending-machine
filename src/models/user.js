@@ -84,7 +84,7 @@ User.findByCredentials = async (username, password) => {
 }
 
 User.prototype.toJSON = function () {
-  return new UserDto(user)
+  return new UserDto(this.dataValues)
 }
 
 User.prototype.generateAccessToken = function () {

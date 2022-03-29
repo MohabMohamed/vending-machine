@@ -10,25 +10,55 @@ afterAll(dbFixture.cleanDB)
 const agent = request.agent(app)
 
 test('Should register new user', async() => {
-    // const response = await agent.post('/users').send({
-    //     username: "johndoe",
-    //     password: '1234avw!#',
-    //     role: 'seller'
-    // }).expect(201)
+    const response = await agent.post('/users').send({
+        username: "johndoe",
+        password: '1234avwM!#',
+        role: 'seller'
+    }).expect(201)
 
-    // const createdUserId = parseInt(response.body.user.id)
+    const createdUserId = parseInt(response.body.user.id)
 
-    // const user = User.findByPk(createdUserId)
-    // expect(user).not.toBeNull()
+    const user = User.findByPk(createdUserId)
+    expect(user).not.toBeNull()
 
-    // ResponseRefreshToken = response.body.refreshToken
-    // const refreshToken = await RefreshToken.findOne({
-    //     where: {
-    //         userId: createdUserId,
-    //         token: ResponseRefreshToken
-    //     }
-    // })
+    ResponseRefreshToken = response.body.refreshToken
+    const refreshToken = await RefreshToken.findOne({
+        where: {
+            userId: createdUserId,
+            token: ResponseRefreshToken
+        }
+    })
 
-    // expect(refreshToken).not.toBeNull()
-    // expect(refreshToken.token).toBe(ResponseRefreshToken)
+    expect(refreshToken).not.toBeNull()
+    expect(refreshToken.token).toBe(ResponseRefreshToken)
+})
+
+
+
+test('Should login the user', async() => {
+    const response = await agent.post('/users/login').send({
+        username: 'mohabmohamed',
+        password: '1234b0i@(bvw'
+    }).expect(200)
+
+    ResponseRefreshToken = response.body.refreshToken
+
+
+    const refreshToken = await RefreshToken.findOne({
+        where: {
+            userId: response.body.user.id,
+            token: ResponseRefreshToken
+        }
+    })
+
+
+    expect(refreshToken).not.toBeNull()
+    expect(refreshToken.token).toBe(ResponseRefreshToken)
+})
+
+test("Shouldn't login the user for wrong credentials", async() => {
+    const response = await agent.post('/users/login').send({
+        username: 'mohabmohamed',
+        password: 'not the right password'
+    }).expect(401)
 })
