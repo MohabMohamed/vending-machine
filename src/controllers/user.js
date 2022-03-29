@@ -28,4 +28,11 @@ const loginUser = async body => {
   return new UserDto.UserLoginDto(user, refreshToken, accessToken)
 }
 
-module.exports = { registerUser, loginUser }
+const logoutUser = async body => {
+  if (!body.refreshToken || !body.refreshTokenObj) {
+    throw new Error()
+  }
+  await body.refreshTokenObj.destroy()
+}
+
+module.exports = { registerUser, loginUser, logoutUser }

@@ -2,6 +2,7 @@ const express = require('express')
 const UserController = require('../controllers/user')
 const rules = require('../middleware/validators/userRoles')
 const validate = require('../middleware/validators/validator')
+const auth = require('../middleware/auth')
 
 const router = new express.Router()
 
@@ -30,5 +31,18 @@ router.post(
     }
   }
 )
+
+router.get('/users/logout', auth.authenticateRefreshToken, async (req, res) => {
+  try {
+    UserController.logoutUser({
+      refreshToken: req.refreshToken,
+      refreshTokenObj: req.refreshTokenObj
+    })
+
+    res.send({ ok: true })
+  } catch (e) {
+    res.status(401).send()
+  }
+})
 
 module.exports = router

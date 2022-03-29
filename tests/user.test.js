@@ -62,3 +62,17 @@ test("Shouldn't login the user for wrong credentials", async() => {
         password: 'not the right password'
     }).expect(401)
 })
+
+
+test('should logout the user', async() => {
+
+    let matchedRefreshToken = await RefreshToken.findOne({ where: { token: dbFixture.firstRefreshToken } })
+    expect(matchedRefreshToken).not.toBeNull()
+    const token = `Bearer ${dbFixture.firstRefreshToken}`
+
+    await agent.get('/users/logout').set('Authorization', token).send().expect(200)
+
+    matchedRefreshToken = await RefreshToken.findOne({ where: { token: dbFixture.firstRefreshToken } })
+
+    expect(matchedRefreshToken).toBeNull()
+})
