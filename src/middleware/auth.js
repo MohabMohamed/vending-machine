@@ -1,6 +1,7 @@
 const jwt = require('../util/jwt')
 const { wrongToken } = require('../errors/tokenError')
 const RefreshToken = require('../models/refreshToken')
+const { unAuthorized } = require('../errors/userError')
 
 const authenticate = async (req, res, next) => {
   try {
@@ -58,4 +59,17 @@ const authenticateRefreshToken = async (req, res, next) => {
   }
 }
 
-module.exports = { authenticate, authenticateRefreshToken }
+const authorize = role => {
+  return async (req, res, next) => {
+    try {
+      if (role != req.user.role) {
+        throw unAuthorized()
+      }
+      next()
+    } catch (error) {
+      res.status(error.code).send(error)
+    }
+  }
+}
+
+module.exports = { authenticate, authenticateRefreshToken, authorize }

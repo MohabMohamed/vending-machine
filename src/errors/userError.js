@@ -19,4 +19,16 @@ const unableToRegister = () => {
   }
 }
 
-module.exports = { unableToLogin, existingUsername, unableToRegister }
+const unAuthorized = () => {
+  return {
+    code: 401,
+    errors: ['Sorry but you are unauthorized for this action.']
+  }
+}
+
+module.exports = {
+  unableToLogin,
+  existingUsername,
+  unableToRegister,
+  unAuthorized
+}
