@@ -34,7 +34,7 @@ router.post(
 
 router.get('/users/logout', auth.authenticateRefreshToken, async (req, res) => {
   try {
-    UserController.logoutUser({
+    await UserController.logoutUser({
       refreshToken: req.refreshToken,
       refreshTokenObj: req.refreshTokenObj
     })

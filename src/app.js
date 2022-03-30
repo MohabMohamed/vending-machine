@@ -2,6 +2,7 @@ const express = require('express')
 const { NODE_ENV_ENUM, runIfEnv } = require('./util/node-env')
 const healthRouter = require('./routers/health')
 const userRouter = require('./routers/user')
+const productRouter = require('./routers/product')
 require('./models')
 
 const app = express()
@@ -30,5 +31,6 @@ runIfEnv(NODE_ENV_ENUM.dev, () => {
 app.use(express.json())
 app.use(healthRouter)
 app.use(userRouter)
+app.use(productRouter)
 
 module.exports = app
