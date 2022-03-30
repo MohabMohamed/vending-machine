@@ -35,6 +35,14 @@ const firstProduct = {
     amountAvailable: 25
 }
 
+let secondProductId = 2
+const secondProduct = {
+    id: secondProductId,
+    productName: 'molto',
+    cost: 5,
+    amountAvailable: 30
+}
+
 
 const setupDatabase = async() => {
     await User.destroy({ where: {} })
@@ -53,8 +61,10 @@ const setupDatabase = async() => {
     })
     secondUserId = user2.id
 
-    const product1 = await Product.create({...firstProduct, sellerId: firstUserId })
-    firstProductId = product1.id
+    await Product.create({...firstProduct, sellerId: firstUserId })
+
+    await Product.create({...secondProduct, sellerId: firstUserId })
+
 }
 
 
@@ -71,5 +81,7 @@ module.exports = {
     firstUserId,
     secondUserId,
     firstProduct,
-    firstProductId
+    firstProductId,
+    secondProduct,
+    secondProductId
 }

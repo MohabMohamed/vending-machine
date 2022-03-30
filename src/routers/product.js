@@ -5,6 +5,7 @@ const RolesEnum = require('../util/rolesEnum')
 const ProductRoles = require('../middleware/validators/productRoles')
 const ProductController = require('../controllers/product')
 const router = new express.Router()
+const defaultPagination = require('../util/defaultPagination')
 
 router.post(
   '/products',
@@ -30,6 +31,25 @@ router.post(
 router.get('/products/:productId', async (req, res) => {
   try {
     const responseData = await ProductController.getProduct(req.params)
+    res.status(200).send(responseData)
+  } catch (error) {
+    const statusCode = error.code || 404
+    res.status(statusCode).send(error)
+  }
+})
+
+router.get('/products', async (req, res) => {
+  try {
+    const pagination = Object.assign(defaultPagination)
+
+    if (req.query.limit && req.query.limit > 0) {
+      pagination.limit = req.query.limit
+    }
+    if (req.query.offset && req.query.offset > 0) {
+      pagination.offset = req.query.offset
+    }
+
+    const responseData = await ProductController.getAllProducts(pagination)
     res.status(200).send(responseData)
   } catch (error) {
     const statusCode = error.code || 404

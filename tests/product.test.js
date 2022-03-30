@@ -81,3 +81,20 @@ test('shouldn\'t get the info of not found product', async() => {
     expect(requestResponse.body.productName).toBeUndefined()
 
 })
+
+test('should get one product', async() => {
+    const requestResponse = await agent.get('/products/?limit=1').
+    send().expect(200)
+
+    expect(requestResponse.body.length).toBe(1)
+
+})
+
+test('should get two products', async() => {
+    const requestResponse = await agent.get('/products/?limit=2&&offset=0').
+    send().expect(200)
+
+    expect(requestResponse.body.length).toBe(2)
+
+
+})
