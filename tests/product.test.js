@@ -63,3 +63,21 @@ test('Shouldn\'t let buyer add a product', async() => {
     expect(product).toBeNull()
 
 })
+
+test('should get the info of product', async() => {
+    const requestResponse = await agent.get(`/products/${dbFixture.firstProductId}`).
+    send().expect(200)
+
+
+    expect(requestResponse.body.productName).toBe(dbFixture.firstProduct.productName)
+
+})
+
+test('shouldn\'t get the info of not found product', async() => {
+    const requestResponse = await agent.get(`/products/100`).
+    send().expect(404)
+
+
+    expect(requestResponse.body.productName).toBeUndefined()
+
+})

@@ -1,19 +1,21 @@
 const Product = require('../models/product')
-const { ProductDto } = require('../dtos/product')
+const { ProductDto, ProductInfoDto } = require('../dtos/product')
 
 const insertProduct = async (body, user) => {
-  try {
-    const product = await Product.create({
-      productName: body.productName,
-      amountAvailable: body.amountAvailable,
-      cost: body.cost,
-      sellerId: user.id
-    })
+  const product = await Product.create({
+    productName: body.productName,
+    amountAvailable: body.amountAvailable,
+    cost: body.cost,
+    sellerId: user.id
+  })
 
-    return new ProductDto(product)
-  } catch (error) {
-    throw error
-  }
+  return new ProductDto(product)
 }
 
-module.exports = { insertProduct }
+const getProduct = async body => {
+  const product = await Product.findByPk(body.productId, { include: 'seller' })
+
+  return new ProductInfoDto(product, product.seller.username)
+}
+
+module.exports = { insertProduct, getProduct }

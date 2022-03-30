@@ -8,4 +8,14 @@ class ProductDto {
   }
 }
 
-module.exports = { ProductDto }
+class ProductInfoDto {
+  constructor (product, sellerName) {
+    this.id = product.id
+    this.productName = product.productName
+    this.amountAvailable = product.amountAvailable
+    this.cost = product.cost
+    this.sellerName = product.sellerName
+  }
+}
+
+module.exports = { ProductDto, ProductInfoDto }

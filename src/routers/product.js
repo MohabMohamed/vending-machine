@@ -27,4 +27,14 @@ router.post(
   }
 )
 
+router.get('/products/:productId', async (req, res) => {
+  try {
+    const responseData = await ProductController.getProduct(req.params)
+    res.status(200).send(responseData)
+  } catch (error) {
+    const statusCode = error.code || 404
+    res.status(statusCode).send(error)
+  }
+})
+
 module.exports = router

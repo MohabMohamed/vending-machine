@@ -5,9 +5,9 @@ const Product = require('../../src/models/product')
 const RoleEnum = require('../../src/util/rolesEnum')
 const rolesEnum = require('../../src/util/rolesEnum')
 
-let firstUserId
+let firstUserId = 1
 const firstUser = {
-
+    id: firstUserId,
     role: RoleEnum.seller.roleName,
     username: 'mohabmohamed',
     password: '1234b0i@(bvw',
@@ -16,6 +16,7 @@ const firstUser = {
 
 let secondUserId = 2
 const secondUser = {
+    id: secondUserId,
     roleId: rolesEnum.buyer.roleName,
     username: 'elonmusk',
     password: '1234b0i@(bvw',
@@ -24,6 +25,16 @@ const secondUser = {
 
 const firstRefreshToken = User.generateRefreshToken()
 const secondRefreshToken = User.generateRefreshToken()
+
+
+let firstProductId = 1
+const firstProduct = {
+    id: firstProductId,
+    productName: 'oreo',
+    cost: 4,
+    amountAvailable: 25
+}
+
 
 const setupDatabase = async() => {
     await User.destroy({ where: {} })
@@ -41,7 +52,11 @@ const setupDatabase = async() => {
         include: ['refreshToken']
     })
     secondUserId = user2.id
+
+    const product1 = await Product.create({...firstProduct, sellerId: firstUserId })
+    firstProductId = product1.id
 }
+
 
 
 const cleanDB = async() => {
@@ -54,5 +69,7 @@ module.exports = {
     firstRefreshToken,
     secondRefreshToken,
     firstUserId,
-    secondUserId
+    secondUserId,
+    firstProduct,
+    firstProductId
 }
