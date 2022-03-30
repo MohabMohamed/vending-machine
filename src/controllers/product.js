@@ -1,6 +1,11 @@
 const Product = require('../models/product')
 const { ProductDto, ProductInfoDto } = require('../dtos/product')
 const productError = require('../errors/productError')
+const { sequelize } = require('../models/index')
+const { unAuthorized } = require('../errors/userError')
+const dbError = require('../errors/dbError')
+const { BaseError } = require('sequelize')
+
 
 const insertProduct = async (body, user) => {
   const product = await Product.create({
@@ -29,4 +34,39 @@ const getAllProducts = async body => {
   )
 }
 
-module.exports = { insertProduct, getProduct, getAllProducts }
+const deleteProduct = async (productId, sellerId) => {
+  const transaction = await sequelize.transaction()
+  try {
+    const product = await Product.findByPk(productId, {
+      transaction,
+      include: 'seller'
+    })
+
+    if (!product) {
+      throw productError.productNotFound()
+    }
+
+    if (sellerId !== product.seller.id) {
+      throw new unAuthorized()
+    }
+    await Product.destroy({
+      where: { id: product.id },
+      transaction
+    })
+
+    await transaction.commit()
+
+    return new ProductDto(product)
+  } catch (error) {
+    await transaction.rollback()
+
+    if (error instanceof BaseError) {
+      throw new dbError.unexposedDbError()
+    } else {
+      throw error
+    }
+  }
+}
+
+module.exports = { insertProduct, getProduct, getAllProducts, deleteProduct }
+

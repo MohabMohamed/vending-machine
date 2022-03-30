@@ -57,4 +57,22 @@ router.get('/products', async (req, res) => {
   }
 })
 
+router.delete(
+  '/products/:productId',
+  Auth.authenticate,
+  Auth.authorize(RolesEnum.seller.roleName),
+  async (req, res) => {
+    try {
+      const responseData = await ProductController.deleteProduct(
+        req.params.productId,
+        req.user.id
+      )
+      res.status(200).send(responseData)
+    } catch (error) {
+      const statusCode = error.code || 400
+      res.status(statusCode).send(error)
+    }
+  }
+)
+
 module.exports = router

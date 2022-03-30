@@ -17,7 +17,8 @@ test('Should let seller add a product', async() => {
     }).expect(200)
 
 
-    userAccessToken = loginResponse.body.accessToken
+const userAccessToken = loginResponse.body.accessToken
+
     const token = `Bearer ${userAccessToken}`
 
     const productToInsert = {
@@ -45,7 +46,8 @@ test('Shouldn\'t let buyer add a product', async() => {
     }).expect(200)
 
 
-    userAccessToken = loginResponse.body.accessToken
+const userAccessToken = loginResponse.body.accessToken
+
     const token = `Bearer ${userAccessToken}`
 
     const productToInsert = {
@@ -54,7 +56,7 @@ test('Shouldn\'t let buyer add a product', async() => {
         amountAvailable: 20
     }
 
-    const requestResponse = await agent.post('/products').set(
+     await agent.post('/products').set(
         'Authorization', token).send(productToInsert).expect(401)
 
 
@@ -97,4 +99,35 @@ test('should get two products', async() => {
     expect(requestResponse.body.length).toBe(2)
 
 
+})
+test("Should let seller delete it's product", async () => {
+  const loginResponse = await agent
+    .post('/users/login')
+    .send({
+      username: 'mohabmohamed',
+      password: '1234b0i@(bvw'
+    })
+    .expect(200)
+
+  const userAccessToken = loginResponse.body.accessToken
+  const token = `Bearer ${userAccessToken}`
+
+  let product = await Product.findByPk(dbFixture.firstProductId)
+
+  expect(product).not.toBeNull()
+
+  const requestResponse = await agent
+    .delete(`/products/${dbFixture.firstProductId}`)
+    .set('Authorization', token)
+    .send()
+    .expect(200)
+
+  product = await Product.findByPk(dbFixture.firstProductId)
+
+  expect(product).toBeNull()
+
+  expect(requestResponse.body.productName).toBe(
+    dbFixture.firstProduct.productName
+  )
+  expect(requestResponse.body.id).toBe(dbFixture.firstProductId)
 })
