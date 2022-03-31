@@ -6,7 +6,6 @@ const { unAuthorized } = require('../errors/userError')
 const dbError = require('../errors/dbError')
 const { BaseError } = require('sequelize')
 
-
 const insertProduct = async (body, user) => {
   const product = await Product.create({
     productName: body.productName,
@@ -68,5 +67,39 @@ const deleteProduct = async (productId, sellerId) => {
   }
 }
 
-module.exports = { insertProduct, getProduct, getAllProducts, deleteProduct }
+const updateProduct = async (productId, updatedFields, sellerId) => {
+  const transaction = await sequelize.transaction()
+  try {
+    const product = await Product.findByPk(productId, {
+      transaction
+    })
 
+    if (!product) {
+      throw productError.productNotFound()
+    }
+
+    if (sellerId !== product.sellerId) {
+      throw new unAuthorized()
+    }
+    await product.update(updatedFields)
+    await transaction.commit()
+
+    return new ProductDto(product)
+  } catch (error) {
+    await transaction.rollback()
+
+    if (error instanceof BaseError) {
+      throw new dbError.unexposedDbError()
+    } else {
+      throw error
+    }
+  }
+}
+
+module.exports = {
+  insertProduct,
+  getProduct,
+  getAllProducts,
+  deleteProduct,
+  updateProduct
+}

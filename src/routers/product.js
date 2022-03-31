@@ -75,4 +75,36 @@ router.delete(
   }
 )
 
+router.put(
+  '/products/:productId',
+  Auth.authenticate,
+  Auth.authorize(RolesEnum.seller.roleName),
+  ProductRoles.PutProductRules(),
+  validate,
+  async (req, res) => {
+    try {
+      updatedFields = {}
+      if (req.body.productName) {
+        updatedFields.productName = req.body.productName
+      }
+      if (req.body.cost) {
+        updatedFields.cost = req.body.cost
+      }
+      if (req.body.amountAvailable) {
+        updatedFields.amountAvailable = req.body.amountAvailable
+      }
+
+      const responseData = await ProductController.updateProduct(
+        req.params.productId,
+        updatedFields,
+        req.user.id
+      )
+      res.status(200).send(responseData)
+    } catch (error) {
+      const statusCode = error.code || 400
+      res.status(statusCode).send(error)
+    }
+  }
+)
+
 module.exports = router
