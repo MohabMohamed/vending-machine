@@ -26,9 +26,17 @@ const unAuthorized = () => {
   }
 }
 
+const userNotFound = () => {
+  return {
+    code: 404,
+    errors: ['somethin wrong happened please logout and re-login again']
+  }
+}
+
 module.exports = {
   unableToLogin,
   existingUsername,
   unableToRegister,
-  unAuthorized
+  unAuthorized,
+  userNotFound,
 }

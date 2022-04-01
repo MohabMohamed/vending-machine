@@ -88,7 +88,8 @@ User.prototype.toJSON = function () {
 }
 
 User.prototype.generateAccessToken = function () {
-  const { id, username, role } = this.dataValues
+const { id, username, role } = this
+
 
   return jwt.sign(
     {

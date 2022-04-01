@@ -3,6 +3,8 @@ const dbFixture = require('./fixtures/db')
 const app = require('../src/app')
 const User = require('../src/models/user')
 const RefreshToken = require('../src/models/refreshToken')
+const { buyer } = require('../src/util/rolesEnum')
+
 
 beforeEach(dbFixture.setupDatabase)
 afterAll(dbFixture.cleanDB)
@@ -75,4 +77,34 @@ test('should logout the user', async() => {
     matchedRefreshToken = await RefreshToken.findOne({ where: { token: dbFixture.firstRefreshToken } })
 
     expect(matchedRefreshToken).toBeNull()
+})
+test('should let buyer deposit coins in his account', async () => {
+  const loginResponse = await agent
+    .post('/users/login')
+    .send({
+      username: dbFixture.secondUser.username,
+      password: dbFixture.secondUser.password
+    })
+    .expect(200)
+
+  const userAccessToken = loginResponse.body.accessToken
+  const token = `Bearer ${userAccessToken}`
+
+  const buyerOldData = await User.findByPk(dbFixture.secondUserId)
+
+  const coins = [20, 5]
+  let coinsSum = 25
+
+  const requestResponse = await agent
+    .post('/deposit')
+    .set('Authorization', token)
+    .send({ coins })
+    .expect(200)
+
+  coinsSum += buyerOldData.deposit
+  expect(requestResponse.body.deposit).toBe(coinsSum)
+
+  const buyerNewData = await User.findByPk(dbFixture.secondUserId)
+
+  expect(buyerNewData.deposit).toBe(coinsSum)
 })

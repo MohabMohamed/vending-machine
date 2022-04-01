@@ -1,4 +1,6 @@
 const { body } = require('express-validator')
+const RoleEnum = require('../../util/rolesEnum')
+
 
 const PostUserRules = () => {
   return [
@@ -7,6 +9,10 @@ const PostUserRules = () => {
       .trim()
       .notEmpty()
       .toLowerCase(),
+      
+    body('role')
+      .isIn([RoleEnum.seller.roleName,
+            RoleEnum.buyer.roleName]),
 
     body(
       'password',

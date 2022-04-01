@@ -17,7 +17,7 @@ const firstUser = {
 let secondUserId = 2
 const secondUser = {
     id: secondUserId,
-    roleId: rolesEnum.buyer.roleName,
+    role: RoleEnum.buyer.roleName,
     username: 'elonmusk',
     password: '1234b0i@(bvw',
     deposit: 50
@@ -78,6 +78,8 @@ module.exports = {
     cleanDB,
     firstRefreshToken,
     secondRefreshToken,
+    firstUser,
+    secondUser,
     firstUserId,
     secondUserId,
     firstProduct,

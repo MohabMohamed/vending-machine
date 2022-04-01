@@ -1,12 +1,16 @@
 const express = require('express')
 const UserController = require('../controllers/user')
-const rules = require('../middleware/validators/userRoles')
+const userRules = require('../middleware/validators/userRoles')
+
 const validate = require('../middleware/validators/validator')
-const auth = require('../middleware/auth')
+const Auth = require('../middleware/auth')
+const coinsRules = require('../middleware/validators/coins')
+const RolesEnum = require('../util/rolesEnum')
+
 
 const router = new express.Router()
 
-router.post('/users', rules.PostUserRules(), validate, async (req, res) => {
+router.post('/users', userRules.PostUserRules(), validate, async (req, res) => {
   try {
     const responseData = await UserController.registerUser(req.body)
     res.status(201).send(responseData)
@@ -18,7 +22,7 @@ router.post('/users', rules.PostUserRules(), validate, async (req, res) => {
 
 router.post(
   '/users/login',
-  rules.LoginUserRules(),
+  userRules.LoginUserRules(),
   validate,
   async (req, res) => {
     try {
@@ -32,7 +36,7 @@ router.post(
   }
 )
 
-router.get('/users/logout', auth.authenticateRefreshToken, async (req, res) => {
+router.get('/users/logout', Auth.authenticateRefreshToken, async (req, res) => {
   try {
     await UserController.logoutUser({
       refreshToken: req.refreshToken,
@@ -44,5 +48,26 @@ router.get('/users/logout', auth.authenticateRefreshToken, async (req, res) => {
     res.status(401).send()
   }
 })
+
+router.post(
+  '/deposit',
+  Auth.authenticate,
+  Auth.authorize(RolesEnum.buyer.roleName),
+  coinsRules.coinsRules(),
+  validate,
+  async (req, res) => {
+    try {
+      const responseData = await UserController.deposit(
+        req.user.id,
+        req.body.coins
+      )
+
+      res.status(200).send(responseData)
+    } catch (error) {
+      const statusCode = error.code || 400
+      res.status(statusCode).send(error)
+    }
+  }
+)
 
 module.exports = router

@@ -61,6 +61,7 @@ const authenticateRefreshToken = async (req, res, next) => {
 
 const authorize = role => {
   return async (req, res, next) => {
+
     try {
       if (role != req.user.role) {
         throw unAuthorized()
