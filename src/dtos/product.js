@@ -14,7 +14,8 @@ class ProductInfoDto {
     this.productName = product.productName
     this.amountAvailable = product.amountAvailable
     this.cost = product.cost
-    this.sellerName = product.sellerName
+this.sellerName = sellerName
+
   }
 }
 

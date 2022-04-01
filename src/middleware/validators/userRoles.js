@@ -43,4 +43,13 @@ const LoginUserRules = () => {
   ]
 }
 
-module.exports = { PostUserRules, LoginUserRules }
+const BuyRules = () => {
+  return [
+    body(['productId', 'amount'])
+      .exists()
+      .isInt()
+  ]
+}
+
+module.exports = { PostUserRules, LoginUserRules, BuyRules }
+

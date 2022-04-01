@@ -4,6 +4,8 @@ const app = require('../src/app')
 const User = require('../src/models/user')
 const RefreshToken = require('../src/models/refreshToken')
 const { buyer } = require('../src/util/rolesEnum')
+const Product = require('../src/models/product')
+
 
 
 beforeEach(dbFixture.setupDatabase)
@@ -107,4 +109,54 @@ test('should let buyer deposit coins in his account', async () => {
   const buyerNewData = await User.findByPk(dbFixture.secondUserId)
 
   expect(buyerNewData.deposit).toBe(coinsSum)
+})
+
+test('should let buyer buy a product', async () => {
+  const loginResponse = await agent
+    .post('/users/login')
+    .send({
+      username: dbFixture.secondUser.username,
+      password: dbFixture.secondUser.password
+    })
+    .expect(200)
+
+  const userAccessToken = loginResponse.body.accessToken
+  const token = `Bearer ${userAccessToken}`
+
+  const buyerOldData = await User.findByPk(dbFixture.secondUserId)
+  const sellerOldData = await User.findByPk(dbFixture.firstUserId)
+  const productOldData = await Product.findByPk(dbFixture.secondProductId)
+
+  const amount = 3
+  const totalPrice = dbFixture.secondProduct.cost * amount
+  const requestBody = {
+    productId: dbFixture.secondProductId,
+    amount
+  }
+
+  const requestResponse = await agent
+    .post('/buy')
+    .set('Authorization', token)
+    .send(requestBody)
+    .expect(200)
+
+  expect(requestResponse.body.totalSpent).toBe(totalPrice)
+  expect(requestResponse.body.productName).toBe(productOldData.productName)
+  expect(requestResponse.body.amount).toBe(amount)
+  expect(requestResponse.body.change.sort()).toStrictEqual(
+    [
+      { coinValue: 20, amount: 2 },
+      { coinValue: 5, amount: 1 }
+    ].sort()
+  )
+
+  const buyerNewData = await User.findByPk(dbFixture.secondUserId)
+  const sellerNewData = await User.findByPk(dbFixture.firstUserId)
+  const productNewData = await Product.findByPk(dbFixture.secondProductId)
+
+  expect(buyerNewData.deposit).toBe(0)
+  expect(sellerNewData.deposit).toBe(sellerOldData.deposit + totalPrice)
+  expect(productNewData.amountAvailable).toBe(
+    productOldData.amountAvailable - amount
+  )
 })

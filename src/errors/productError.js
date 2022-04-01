@@ -5,6 +5,14 @@ const productNotFound = () => {
   }
 }
 
+const notEnoughAmountAvailable = () => {
+  return {
+    code: 400,
+    errors: ['not enough amount available']
+  }
+}
+
 module.exports = {
-  productNotFound
+productNotFound, notEnoughAmountAvailable
+
 }

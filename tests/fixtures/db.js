@@ -20,7 +20,8 @@ const secondUser = {
     role: RoleEnum.buyer.roleName,
     username: 'elonmusk',
     password: '1234b0i@(bvw',
-    deposit: 50
+deposit: 105,
+
 }
 
 const firstRefreshToken = User.generateRefreshToken()
@@ -31,7 +32,7 @@ let firstProductId = 1
 const firstProduct = {
     id: firstProductId,
     productName: 'oreo',
-    cost: 4,
+    cost: 5,
     amountAvailable: 25
 }
 
@@ -39,7 +40,7 @@ let secondProductId = 2
 const secondProduct = {
     id: secondProductId,
     productName: 'molto',
-    cost: 5,
+    cost: 20,
     amountAvailable: 30
 }
 

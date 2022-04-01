@@ -29,7 +29,15 @@ const unAuthorized = () => {
 const userNotFound = () => {
   return {
     code: 404,
-    errors: ['somethin wrong happened please logout and re-login again']
+errors: ['something wrong happened please logout and re-login again']
+
+  }
+}
+
+const notEnoughDeposit = () => {
+  return {
+    code: 402,
+    errors: ["your account doesn't contain enough money"]
   }
 }
 
@@ -39,4 +47,6 @@ module.exports = {
   unableToRegister,
   unAuthorized,
   userNotFound,
+notEnoughDeposit
+
 }

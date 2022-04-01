@@ -70,4 +70,26 @@ router.post(
   }
 )
 
+router.post(
+  '/buy',
+  Auth.authenticate,
+  Auth.authorize(RolesEnum.buyer.roleName),
+  userRules.BuyRules(),
+  validate,
+  async (req, res) => {
+    try {
+      const responseData = await UserController.buy(
+        req.user.id,
+        req.body.productId,
+        req.body.amount
+      )
+
+      res.status(200).send(responseData)
+    } catch (error) {
+      const statusCode = error.code || 400
+      res.status(statusCode).send(error)
+    }
+  }
+)
+
 module.exports = router
