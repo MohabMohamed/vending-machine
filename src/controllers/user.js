@@ -4,13 +4,12 @@ const RefreshToken = require('../models/refreshToken')
 const UserError = require('../errors/userError')
 const { sequelize } = require('../models/index')
 const dbError = require('../errors/dbError')
-const { BaseError } = require('sequelize')
+const { BaseError, Utils } = require('sequelize')
+
 const Product = require('../models/product')
 const ProductError = require('../errors/productError')
 const moneyToChange = require('../util/moneyToChange')
 const TradeDto = require('../dtos/trade')
-
-
 
 const registerUser = async body => {
   try {
@@ -147,6 +146,36 @@ const buy = async (buyerId, productId, amount) => {
   }
 }
 
-module.exports = { registerUser, loginUser, logoutUser, deposit, buy }
+const reset = async buyerId => {
+  const transaction = await sequelize.transaction()
+  try {
+    const buyer = await User.findByPk(buyerId, {
+      transaction,
+      lock: transaction.LOCK.UPDATE
+    })
 
+    if (!buyer) {
+      throw new UserError.userNotFound()
+    }
 
+    const coins = moneyToChange(buyer.deposit)
+    await buyer.update(
+      { deposit: 0 },
+      {
+        transaction
+      }
+    )
+    await transaction.commit()
+    return new TradeDto.ResetDto(coins)
+  } catch (error) {
+    await transaction.rollback()
+
+    if (error instanceof BaseError) {
+      throw new dbError.unexposedDbError()
+    } else {
+      throw error
+    }
+  }
+}
+
+module.exports = { registerUser, loginUser, logoutUser, deposit, buy, reset }

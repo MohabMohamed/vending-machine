@@ -7,4 +7,10 @@ class BuyDto {
   }
 }
 
-module.exports = { BuyDto }
+class ResetDto {
+  constructor (change) {
+    this.change = change
+  }
+}
+
+module.exports = { BuyDto, ResetDto }

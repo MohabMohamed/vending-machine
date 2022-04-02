@@ -7,7 +7,6 @@ const Auth = require('../middleware/auth')
 const coinsRules = require('../middleware/validators/coins')
 const RolesEnum = require('../util/rolesEnum')
 
-
 const router = new express.Router()
 
 router.post('/users', userRules.PostUserRules(), validate, async (req, res) => {
@@ -83,6 +82,22 @@ router.post(
         req.body.productId,
         req.body.amount
       )
+
+      res.status(200).send(responseData)
+    } catch (error) {
+      const statusCode = error.code || 400
+      res.status(statusCode).send(error)
+    }
+  }
+)
+
+router.get(
+  '/reset',
+  Auth.authenticate,
+  Auth.authorize(RolesEnum.buyer.roleName),
+  async (req, res) => {
+    try {
+      const responseData = await UserController.reset(req.user.id)
 
       res.status(200).send(responseData)
     } catch (error) {

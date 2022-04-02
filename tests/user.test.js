@@ -160,3 +160,35 @@ test('should let buyer buy a product', async () => {
     productOldData.amountAvailable - amount
   )
 })
+
+test("should let buyer reset it's deposit", async () => {
+  const loginResponse = await agent
+    .post('/users/login')
+    .send({
+      username: dbFixture.secondUser.username,
+      password: dbFixture.secondUser.password
+    })
+    .expect(200)
+
+  const userAccessToken = loginResponse.body.accessToken
+  const token = `Bearer ${userAccessToken}`
+
+  const buyerOldData = await User.findByPk(dbFixture.secondUserId)
+
+  const requestResponse = await agent
+    .get('/reset')
+    .set('Authorization', token)
+    .send()
+    .expect(200)
+
+  expect(requestResponse.body.change.sort()).toStrictEqual(
+    [
+      { coinValue: 100, amount: 1 },
+      { coinValue: 5, amount: 1 }
+    ].sort()
+  )
+
+  const buyerNewData = await User.findByPk(dbFixture.secondUserId)
+
+  expect(buyerNewData.deposit).toBe(0)
+})
