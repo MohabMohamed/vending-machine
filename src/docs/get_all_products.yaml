@@ -1,0 +1,51 @@
+paths:
+  /products:
+    get:
+      tags:
+        - product
+      summary: return list of products
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: limit
+          description: the number of products to be returned.
+          required: false
+          type: integer
+        - in: query
+          name: offset
+          description: number of products to be skipped
+          required: false
+          type: integer
+      responses:
+        200:
+          description: product created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/responseBody'
+        404:
+          description: product not found.
+
+definitions:
+  responseBody:
+    type: "array"
+    items:
+      type: "object"
+      properties:
+        id:
+          type: integer
+          example: 1
+        productName:
+          type: string
+          example: 'marshmallow'
+        amountAvailable:
+          type: integer
+          example: 6
+        cost:
+          type: integer
+          example: 15
+        sellerName:
+          type: string
+          example: "mohab mohamed"
+    

@@ -16,6 +16,10 @@ paths:
       responses:
         200:
           description: The user credentials are correct and he logged into the system.
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/userInfo'
         401:
           description: The user credentials are wrong.
 definitions:
@@ -30,3 +34,37 @@ definitions:
       password:
         type: string
         example: "12345a@Z1s"
+  userInfo:
+    required:
+     - user
+     - refreshToken
+     - accessToken
+    properties:
+      user:
+        type: "object"
+        required:
+          - id
+          - username
+          - deposit
+          - role
+        properties:
+          id:
+            type: integer
+            example: 1
+          username:
+            type: string
+            example: "mohab mohamed"
+          deposit:
+            type: integer
+            example: 120
+          role:
+            type: string
+            example: "seller"
+      refreshToken:
+        type: string
+        example: "exknedjecnencjwcnndc.dwkdqdqnkcnwkcnq2i3dkn3e.ed3n2ufn3unj2333"
+      accessToken:
+        type: string
+        example: "e2tgsb27tsg27g2s72h27dcd.ncejhdncuheucue38bce.jsi3uj832d3un3d3"
+
+

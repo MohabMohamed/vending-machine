@@ -1,0 +1,66 @@
+paths:
+  /products:
+    post:
+      tags:
+        - product
+      summary: let user of type seller adds a new product.
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: product
+          description: the product info.
+          required: true
+          schema:
+            $ref: '#/definitions/product'
+      responses:
+        201:
+          description: product created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/productResponse'
+        400:
+          description: Unable to create product.
+        401:
+          description: unauthorized or unauthenticated.
+definitions:
+  product:
+    required:
+      - productName
+      - amountAvailable
+      - cost
+    properties:
+      productName:
+        type: string
+        example: 'marshmallow'
+      amountAvailable:
+        type: integer
+        example: 6
+      cost:
+        type: integer
+        example: 15
+  productResponse:
+    type: "object"
+    required:
+      - id
+      - productName
+      - amountAvailable
+      - cost
+      - sellerId
+    properties:
+      id:
+        type: integer
+        example: 1
+      productName:
+        type: string
+        example: 'marshmallow'
+      amountAvailable:
+        type: integer
+        example: 6
+      cost:
+        type: integer
+        example: 15
+      sellerId:
+        type: integer
+        example: 2

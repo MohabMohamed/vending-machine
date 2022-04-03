@@ -1,0 +1,65 @@
+paths:
+  /buy:
+    post:
+      tags:
+        - trade
+      summary: make user of type buyer to buy a product.
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: bought product
+          description: bought product and it's quantity.
+          required: true
+          schema:
+            $ref: "#/definitions/boughtProduct"
+      responses:
+        200:
+          description: the buying operation done successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/buyResponse"
+        400:
+          description: not enough amount available.
+        401:
+          description: Sorry but you are unauthorized for this action or our session is expired please login again.
+        402:
+          description: your account doesn't contain enough money.
+        404:
+          description: product with this id not found 
+                      or something wrong happened please logout and re-login again.
+        422:
+          description: request body attributes validation error.
+definitions:
+  boughtProduct:
+    required:
+      - productId
+      - amount
+    properties:
+      productId:
+        type: integer
+        example: 2
+      amount:
+        type: integer
+        example: 5
+  buyResponse:
+    type: "object"
+    required:
+      - totalSpent
+      - productName
+      - amount
+      - change
+    properties:
+      totalSpent:
+        type: integer
+        example: 70
+      productName:
+        type: string
+        example: "Pepsi"
+      amount:
+        type: integer
+        example: 2
+      change:
+        type: [integer]
+        example: [20,5]

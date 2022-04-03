@@ -1,0 +1,54 @@
+paths:
+  /products/{productId}:
+    delete:
+      tags:
+        - product
+      summary: let user of type seller delete a product that he posted.
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: productId
+          description: the product id.
+          required: true
+          type: integer
+      responses:
+        200:
+          description: product deleted successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/productResponse'
+        400:
+          description: Unable to delete the product please try again later.
+        401:
+          description: unauthorized or unauthenticated.
+        404:
+          description: product not found.
+        500:
+          description: some thing wrong happened please try again later.
+definitions:
+  productResponse:
+    type: "object"
+    required:
+      - id
+      - productName
+      - amountAvailable
+      - cost
+      - sellerId
+    properties:
+      id:
+        type: integer
+        example: 1
+      productName:
+        type: string
+        example: 'marshmallow'
+      amountAvailable:
+        type: integer
+        example: 6
+      cost:
+        type: integer
+        example: 15
+      sellerId:
+        type: integer
+        example: 2

@@ -1,0 +1,32 @@
+paths:
+  /reset:
+    get:
+      tags:
+        - user
+      summary: reset buyer deposit and returns the money in the response.
+      produces:
+        - application/json
+      responses:
+        200:
+          description: buyer deposit reseted to zero successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/coin'
+        400:
+          description: Unable to reset the deposit.
+        401:
+          description: unauthorized or unauthenticated.
+        404:
+          description: user not found please re-login again.
+        500:
+          description: something wrong happened please retry again latter.
+definitions:
+  coin:
+    type: "object"
+    required:
+      - coins
+    properties:
+      coins:
+        type: [integer]
+        example: [5, 20, 100]

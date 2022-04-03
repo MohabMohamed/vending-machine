@@ -16,6 +16,10 @@ paths:
       responses:
         201:
           description: new user created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/responseBody'          
         400:
           description: Unable to register.
         409:
@@ -38,3 +42,24 @@ definitions:
       role:
         type: string
         example: "seller"
+  responseBody:
+    type: "object"
+    required:
+      - id
+      - username
+      - deposit
+      - role
+    properties:
+      id:
+        type: integer
+        example: 1
+      username:
+        type: string
+        example: "mohab mohamed"
+      deposit:
+        type: integer
+        example: 0
+      role:
+        type: string
+        example: "seller"
+

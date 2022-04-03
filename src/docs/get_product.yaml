@@ -1,0 +1,49 @@
+paths:
+  /products/{productId}:
+    get:
+      tags:
+        - product
+      summary: return product info by it's id.
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: productId
+          description: the product id.
+          required: true
+          type: integer
+      responses:
+        200:
+          description: product created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/productInfo'
+        404:
+          description: product not found.
+
+definitions:
+  productInfo:
+    type: "object"
+    required:
+      - id
+      - productName
+      - amountAvailable
+      - cost
+      - sellerName
+    properties:
+      id:
+        type: integer
+        example: 1
+      productName:
+        type: string
+        example: 'marshmallow'
+      amountAvailable:
+        type: integer
+        example: 6
+      cost:
+        type: integer
+        example: 15
+      sellerName:
+        type: string
+        example: "mohab mohamed"

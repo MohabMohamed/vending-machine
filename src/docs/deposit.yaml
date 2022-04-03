@@ -1,0 +1,58 @@
+paths:
+  /deposit:
+    post:
+      tags:
+        - trade
+      summary: add money to buyer account.
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: deposit
+          description: It enables a user of type buyer to add money to it's account.
+          required: true
+          schema:
+            $ref: '#/definitions/coin'
+      responses:
+        200:
+          description: coins deposited successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/user'
+        400:
+          description: Unable to deposit.
+        401:
+          description: unauthorized or unauthenticated.
+        404:
+          description: user not found please re-login again.
+        500:
+          description: something wrong happened please retry again latter.
+definitions:
+  coin:
+    required:
+      - coins
+    properties:
+      coins:
+        type: [integer]
+        example: [5, 20, 100]
+  user:
+    type: "object"
+    required:
+      - id
+      - username
+      - deposit
+      - role
+    properties:
+      id:
+        type: integer
+        example: 1
+      username:
+        type: string
+        example: "mohab mohamed"
+      deposit:
+        type: integer
+        example: 120
+      role:
+        type: string
+        example: "buyer"

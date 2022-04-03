@@ -14,7 +14,7 @@ FROM node:17.8-alpine3.14 AS development
 WORKDIR /app
 COPY --from=production-builder /app ./
 COPY . .
-RUN npm install --include=dev
 VOLUME /app
+RUN npm install
 EXPOSE 3000
 CMD ["npm", "run","dev"]
