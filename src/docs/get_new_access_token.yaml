@@ -1,0 +1,48 @@
+paths:
+  /refresh:
+    get:
+      tags:
+        - user
+      summary: let user get new access token.
+      produces:
+        - application/json
+      responses:
+        200:
+          description: the user got new access token successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/userInfo'
+        401:
+          description: the refresh token of the user is expired or wrong, please re-login again.
+definitions:
+  userInfo:
+    required:
+     - user
+     - accessToken
+    properties:
+      user:
+        type: "object"
+        required:
+          - id
+          - username
+          - deposit
+          - role
+        properties:
+          id:
+            type: integer
+            example: 1
+          username:
+            type: string
+            example: "mohab mohamed"
+          deposit:
+            type: integer
+            example: 120
+          role:
+            type: string
+            example: "seller"
+      accessToken:
+        type: string
+        example: "e2tgsb27tsg27g2s72h27dcd.ncejhdncuhwoucue38bce.jsi3uj832d3un3d3"
+
+
