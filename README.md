@@ -12,6 +12,12 @@ To get you a copy of the production version of the project up and running on you
 docker-compose up -d --force-recreate
 ```
 
+## APIs
+
+check [api guide](./API.md) or for more details and trying them out you can run the project in dev
+environment as described in [contribution guide](./CONTRIBUTION.md) and visit `/docs` from the browser
+to view the swagger docs for the APIS.
+
 ## Database Design
 
 ![Vending Machine database scheme](./screenshoots/DB%20shema.png "Vending Machine database scheme")

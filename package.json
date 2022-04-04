@@ -4,8 +4,8 @@
   "description": "A rest APIs for vending machine",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
+    "start": "npx sequelize-cli db:migrate && node src/index.js",
+    "dev": "npx sequelize-cli db:migrate && nodemon src/index.js",
     "test": "env-cmd -f ./config/test.env jest --runInBand",
     "test:watch": "env-cmd -f ./config/test.env jest --watch --runInBand",
     "prepare:dev": "husky install",

@@ -1,6 +1,8 @@
 FROM node:17.8-alpine3.14 AS production-builder
 WORKDIR /app
 COPY package.json ./
+COPY .sequelizerc .sequelizerc
+COPY config/database.js config/database.js
 RUN npm install --production
 
 FROM node:17.8-alpine3.14 AS production
